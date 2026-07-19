@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INSTALASI FARMASI - Portal Informasi Obat RSUD Bandung Kiwari</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        // Konfigurasi custom warna teal bertema RSUD Bandung Kiwari
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        kiwari: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        title: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            /* Efek Background Premium: Menggabungkan foto gedung RSUD Bandung Kiwari dengan lapisan overlay gradasi transparan */
+            background-image: linear-gradient(
+                to bottom, 
+                rgba(241, 245, 249, 0.94) 0%, 
+                rgba(241, 245, 249, 0.97) 100%
+            ), url('https://images.unsplash.com/photo-1586773860418-d3b31966cfb0?auto=format&fit=crop&q=80&w=1600');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        /* Kustomisasi scrollbar agar lebih estetis */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col antialiased pb-12">
+
+    <!-- Google Review Promo Banner Teratas -->
+    <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white py-3 px-4 text-center text-xs sm:text-sm font-semibold shadow-md relative z-50 flex items-center justify-center gap-3 flex-wrap">
+        <span class="flex items-center gap-1.5 text-left">
+            <i class="fa-solid fa-star text-yellow-300 animate-pulse"></i>
+            <span>Bantu kami meningkatkan pelayanan! Berikan ulasan bintang 5 Anda untuk RSUD Bandung Kiwari di Google Maps</span>
+        </span>
+        <a 
+            href="https://search.google.com/local/writereview?placeid=ChIJRZMqpQ_paC4RqbSvTPjNDQU&source=g.page.m._&laa=merchant-review-solicitation" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="bg-white text-orange-700 px-4 py-1.5 rounded-xl text-xs font-bold shadow-lg hover:bg-orange-50 hover:scale-105 active:scale-95 transition-all flex items-center gap-1.5 shrink-0"
+        >
+            Beri Ulasan Sekarang <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+        </a>
+    </div>
+
+    <!-- Header Navigation Bar -->
+    <header class="sticky top-0 z-40 w-full glass-panel border-b border-teal-100 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center">
+                    <div>
+                        <h1 class="font-title font-extrabold text-xl tracking-tight text-kiwari-900 leading-tight uppercase">
+                            INSTALASI FARMASI
+                        </h1>
+                        <p class="text-xs font-semibold text-kiwari-600 tracking-wider uppercase">
+                            RSUD Bandung Kiwari
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="#katalog-obat" class="text-slate-600 hover:text-kiwari-600 font-semibold text-sm transition duration-150">
+                        <i class="fa-solid fa-pills mr-1.5 text-kiwari-500"></i> Informasi Obat
+                    </a>
+                    <a href="#dagusibu" class="text-slate-600 hover:text-kiwari-600 font-semibold text-sm transition duration-150">
+                        <i class="fa-solid fa-heart-pulse mr-1.5 text-kiwari-500"></i> Edukasi DAGUSIBU
+                    </a>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <button id="favorite-toggle-btn" onclick="toggleFavoritesView()" class="relative p-2.5 rounded-xl border border-slate-200 hover:border-teal-300 hover:bg-teal-50 text-slate-600 hover:text-kiwari-600 transition-all" title="Lihat Favorit">
+                        <i class="fa-solid fa-star text-lg"></i>
+                        <span id="fav-count" class="hidden absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+                    </button>
+                    <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-3 py-1.5 rounded-full border border-emerald-200 flex items-center gap-1 shrink-0">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Rawat Jalan
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 mt-6 flex-grow">
+        <!-- Hero Section -->
+        <section class="mb-10 text-center md:text-left py-10 px-6 sm:px-10 rounded-3xl bg-gradient-to-br from-kiwari-800 via-kiwari-900 to-teal-950 text-white relative overflow-hidden shadow-xl">
+            <!-- Dekorasi background abstrak -->
+            <div class="absolute -right-16 -bottom-16 w-64 h-64 bg-teal-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+            <div class="absolute -left-16 -top-16 w-64 h-64 bg-teal-300 rounded-full mix-blend-multiply filter blur-3xl opacity-25"></div>
+            
+            <div class="relative z-10 max-w-3xl">
+                <span class="bg-teal-500/20 text-teal-300 border border-teal-500/30 text-xs font-bold px-3.5 py-1.5 rounded-full inline-block mb-4">
+                    <i class="fa-solid fa-circle-info mr-1"></i> Layanan Edukasi & Informasi Obat Mandiri Pasien
+                </span>
+                <h2 class="font-title font-extrabold text-3xl sm:text-4xl lg:text-5xl mb-4 leading-tight">
+                    Cari Penggunaan & Aturan Obat Secara Tepat
+                </h2>
+                <p class="text-teal-100 text-sm sm:text-base mb-8 max-w-2xl font-light">
+                    Portal resmi Instalasi Farmasi RSUD Bandung Kiwari untuk membantu pasien memahami nama dagang, dosis kekuatan, cara penggunaan, indikasi, efek samping, dan peringatan khusus obat rawat jalan.
+                </p>
+
+                <!-- Bar Pencarian Pintar -->
+                <div class="relative max-w-xl mx-auto md:mx-0">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-magnifying-glass text-teal-600 text-lg"></i>
+                    </div>
+                    <input 
+                        type="text" 
+                        id="search-input"
+                        oninput="handleSearch(this.value)"
+                        placeholder="Ketik nama obat atau merek (contoh: Amlodipine, Uperio, Lyrica)..." 
+                        class="w-full pl-12 pr-28 py-4 bg-white text-slate-800 placeholder-slate-400 rounded-2xl shadow-lg border-2 border-transparent focus:border-teal-400 focus:outline-none text-base transition-all font-medium"
+                    >
+                    <div class="absolute inset-y-1.5 right-1.5 flex items-center">
+                        <button onclick="clearSearch()" class="text-slate-400 hover:text-slate-600 px-3 py-1.5 text-sm mr-1">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Katalog Obat Utama -->
+        <section id="katalog-obat" class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            <!-- Sidebar Kategori Terapi Lipat (Accordion) -->
+            <div id="sidebar-kategori" class="lg:col-span-1 space-y-4 transition-all duration-300">
+                <div class="bg-white/95 rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden">
+                    <!-- Tombol Utama Pemicu Dropdown Kategori -->
+                    <button 
+                        onclick="toggleCategoryAccordion()" 
+                        class="w-full flex items-center justify-between p-4 sm:p-5 font-title font-bold text-slate-800 hover:bg-slate-50 transition-all duration-200 group"
+                    >
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-filter text-kiwari-600 group-hover:scale-110 transition-transform"></i>
+                            Kategori Terapi
+                        </span>
+                        <div class="flex items-center gap-2">
+                            <span id="accordion-badge" class="bg-kiwari-50 text-kiwari-700 text-xs px-2 py-0.5 rounded-full border border-kiwari-100 font-semibold">Buka</span>
+                            <i id="accordion-chevron" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                        </div>
+                    </button>
+                    
+                    <!-- Area Sub-Kategori (Mulai dalam keadaan terlipat/hidden agar menghemat ruang tapi bisa dibuka pas diklik) -->
+                    <div id="category-list-container" class="hidden border-t border-slate-100 bg-slate-50/50 p-3 space-y-1 max-h-[500px] overflow-y-auto">
+                        <div id="category-list" class="space-y-1.5 flex flex-col">
+                            <!-- Kategori akan di-render menggunakan JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Area Tampilan Utama Daftar Obat -->
+            <div id="main-content-obat" class="lg:col-span-3 space-y-6 transition-all duration-300">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div>
+                        <h3 id="current-category-title" class="font-title font-bold text-2xl text-slate-800">
+                            Silakan Pilih Kategori
+                        </h3>
+                        <p id="drug-results-count" class="text-sm text-slate-500 mt-1">
+                            Klik menu "Kategori Terapi" di samping untuk menelusuri obat.
+                        </p>
+                    </div>
+                    
+                    <!-- Mode Sortir -->
+                    <div class="flex items-center gap-2 self-start sm:self-auto">
+                        <span class="text-xs text-slate-500 font-medium">Urutkan:</span>
+                        <select id="sort-select" onchange="handleSort(this.value)" class="bg-white border border-slate-200 text-sm rounded-lg px-2.5 py-1.5 text-slate-600 focus:outline-none focus:border-kiwari-500">
+                            <option value="az">Nama A - Z</option>
+                            <option value="za">Nama Z - A</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Empty State / Petunjuk Awal -->
+                <div id="empty-state" class="bg-white/80 border border-slate-200 rounded-2xl p-12 text-center shadow-sm">
+                    <div class="w-16 h-16 bg-kiwari-50 rounded-full flex items-center justify-center text-kiwari-600 mx-auto mb-4 border border-kiwari-100">
+                        <i class="fa-solid fa-hand-pointer text-2xl animate-bounce"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-800 text-lg mb-1">Mulai Cari Informasi Obat</h4>
+                    <p class="text-sm text-slate-500 max-w-md mx-auto leading-relaxed">
+                        Silakan klik menu <strong class="text-kiwari-600">Kategori Terapi</strong> di panel sebelah kiri Anda, atau gunakan bilah pencarian di atas untuk langsung mencari obat yang Anda inginkan.
+                    </p>
+                </div>
+
+                <!-- Grid Kartu Obat -->
+                <div id="medicine-grid" class="hidden grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                    <!-- Kartu obat akan di-render menggunakan JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Bagian Edukasi DAGUSIBU (Collapsible / Terlipat Bawaan) -->
+        <section id="dagusibu" class="mt-12">
+            <button 
+                onclick="toggleDagusibu()" 
+                class="w-full flex items-center justify-between p-6 rounded-2xl bg-gradient-to-r from-kiwari-700 to-teal-800 text-white font-title font-bold text-base sm:text-lg shadow-md hover:from-kiwari-800 hover:to-teal-900 transition-all duration-200 group"
+            >
+                <span class="flex items-center gap-3">
+                    <span class="p-2 rounded-xl bg-white/10 text-yellow-300 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </span>
+                    <span class="text-left">Kenali Prinsip 5M & Edukasi DAGUSIBU (Klik Untuk Melihat)</span>
+                </span>
+                <i id="dagusibu-chevron" class="fa-solid fa-chevron-down text-white/80 transition-transform duration-300"></i>
+            </button>
+
+            <!-- Isi DAGUSIBU (Hidden by default) -->
+            <div id="dagusibu-content" class="hidden mt-4 bg-gradient-to-br from-teal-50 to-emerald-50 rounded-3xl border border-teal-100 shadow-inner p-6 sm:p-10">
+                <div class="text-center mb-10">
+                    <span class="bg-kiwari-100 text-kiwari-800 text-xs font-bold px-3.5 py-1.5 rounded-full inline-block mb-3">
+                        <i class="fa-solid fa-shield-halved mr-1"></i> Standar Keamanan Obat Nasional
+                    </span>
+                    <h3 class="font-title font-extrabold text-2xl sm:text-3xl text-slate-800">
+                        Prinsip Menjaga Keamanan Terapi Obat Anda
+                    </h3>
+                    <p class="text-sm text-slate-600 mt-2 max-w-xl mx-auto leading-relaxed">
+                        Panduan praktis agar seluruh pasien dan keluarga terhindar dari kesalahan penggunaan obat serta mengoptimalkan kepatuhan konsumsi obat mandiri.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- DA - Dapatkan -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/50 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 bg-teal-100 text-kiwari-700 rounded-xl flex items-center justify-center text-xl font-bold mb-4">
+                            DA
+                        </div>
+                        <h4 class="font-bold text-slate-800 mb-2">Dapatkan Obat</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Pastikan Anda membeli obat di sarana resmi seperti Instalasi Farmasi RSUD Bandung Kiwari, Apotek berizin, atau Puskesmas guna menjamin keaslian obat.
+                        </p>
+                    </div>
+
+                    <!-- GU - Gunakan -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/50 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 bg-sky-100 text-sky-700 rounded-xl flex items-center justify-center text-xl font-bold mb-4">
+                            GU
+                        </div>
+                        <h4 class="font-bold text-slate-800 mb-2">Gunakan Obat</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Patuhi dosis, waktu pemakaian, dan cara minum sesuai petunjuk dokter/apoteker. Jangan menghentikan antibiotik atau obat kronis tanpa instruksi medis.
+                        </p>
+                    </div>
+
+                    <!-- SI - Simpan -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/50 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 bg-amber-100 text-amber-700 rounded-xl flex items-center justify-center text-xl font-bold mb-4">
+                            SI
+                        </div>
+                        <h4 class="font-bold text-slate-800 mb-2">Simpan Obat</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Simpan obat pada wadah aslinya, terlindung dari sinar matahari langsung, kelembaban, serta jauh dari jangkauan anak-anak. Perhatikan suhu penyimpanan yang tertera.
+                        </p>
+                    </div>
+
+                    <!-- BU - Buang -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/50 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 bg-rose-100 text-rose-700 rounded-xl flex items-center justify-center text-xl font-bold mb-4">
+                            BU
+                        </div>
+                        <h4 class="font-bold text-slate-800 mb-2">Buang Obat</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Hancurkan obat dan kemasannya terlebih dahulu sebelum dibuang, untuk menghindari daur ulang obat ilegal oleh pihak-pihak yang tidak bertanggung jawab.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Info Singkat Rumah Sakit -->
+        <section class="mt-12 bg-white/95 rounded-3xl p-6 sm:p-8 border border-slate-200/60 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-4 text-left">
+                <div class="w-16 h-16 rounded-2xl bg-teal-50 flex items-center justify-center text-kiwari-600 border border-teal-100 shrink-0">
+                    <i class="fa-solid fa-hospital text-3xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-title font-extrabold text-slate-800 text-lg">RSUD Bandung Kiwari</h4>
+                    <p class="text-sm text-slate-500 mt-1 max-w-xl">
+                        Jl. K.H. Wahid Hasyim (Kopo) No. 311, Kelurahan Situsaeur, Kecamatan Bojongloa Kidul, Kota Bandung, Jawa Barat.
+                    </p>
+                </div>
+            </div>
+            <div class="text-center md:text-right shrink-0">
+                <p class="text-sm font-semibold text-kiwari-600 italic">
+                    "Unggul dalam Layanan, Tulus dalam Pengabdian"
+                </p>
+                <p class="text-xs text-slate-400 mt-1">
+                    Jam Operasional Farmasi: 24 Jam (UGD) & Rawat Jalan (Jam Kerja)
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Detail Obat -->
+    <div id="medicine-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <!-- Backdrop -->
+        <div onclick="closeModal()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
+        
+        <!-- Konten Modal -->
+        <div class="bg-white w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl relative z-10 animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
+            <!-- Modal Header -->
+            <div class="bg-gradient-to-r from-kiwari-700 to-teal-600 text-white p-6 relative">
+                <button onclick="closeModal()" class="absolute top-4 right-4 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 w-8 h-8 rounded-full flex items-center justify-center transition-all">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <span id="modal-badge" class="bg-teal-500/30 text-teal-100 border border-teal-400/30 text-xs font-bold px-2.5 py-1 rounded-full inline-block mb-2">
+                    Kategori Obat
+                </span>
+                <h3 id="modal-drug-name" class="font-title font-extrabold text-2xl sm:text-3xl">
+                    Nama Obat Generik
+                </h3>
+                <p id="modal-brands" class="text-teal-100 text-sm mt-1 italic">
+                    Nama Dagang: Merek A, Merek B, Merek C
+                </p>
+            </div>
+
+            <!-- Modal Body (Scrollable) -->
+            <div class="p-6 overflow-y-auto space-y-5 text-slate-700">
+                <!-- Baris Dosis & Penggunaan -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+                        <span class="text-xs text-slate-400 font-bold block uppercase tracking-wider mb-1">
+                            <i class="fa-solid fa-weight-hanging text-kiwari-600 mr-1"></i> Dosis & Kekuatan Sediaan
+                        </span>
+                        <p id="modal-strength" class="text-sm font-semibold text-slate-800">
+                            -
+                        </p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+                        <span class="text-xs text-slate-400 font-bold block uppercase tracking-wider mb-1">
+                            <i class="fa-solid fa-clock text-kiwari-600 mr-1"></i> Cara Penggunaan / Aturan Pakai
+                        </span>
+                        <p id="modal-usage" class="text-sm font-semibold text-slate-800">
+                            -
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Detail Deskripsi -->
+                <div>
+                    <h4 class="font-bold text-slate-800 border-b border-slate-100 pb-1.5 mb-2 flex items-center gap-1.5">
+                        <span class="w-1.5 h-4 bg-kiwari-500 rounded-sm inline-block"></span>
+                        Indikasi Utama
+                    </h4>
+                    <p id="modal-indications" class="text-sm leading-relaxed text-slate-600">
+                        -
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-rose-800 border-b border-rose-50 pb-1.5 mb-2 flex items-center gap-1.5">
+                        <span class="w-1.5 h-4 bg-rose-500 rounded-sm inline-block"></span>
+                        Efek Samping Umum
+                    </h4>
+                    <p id="modal-side-effects" class="text-sm leading-relaxed text-slate-600">
+                        -
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-amber-800 border-b border-amber-50 pb-1.5 mb-2 flex items-center gap-1.5">
+                        <span class="w-1.5 h-4 bg-amber-500 rounded-sm inline-block"></span>
+                        Perhatian Khusus & Peringatan
+                    </h4>
+                    <p id="modal-warnings" class="text-sm leading-relaxed text-slate-600 bg-amber-50/50 p-3 rounded-lg border border-amber-200/50">
+                        -
+                    </p>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="bg-slate-50 p-4 border-t border-slate-100 flex items-center justify-between">
+                <button id="modal-fav-btn" class="flex items-center gap-2 text-sm text-slate-600 hover:text-kiwari-600 px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-100 transition-all">
+                    <i class="fa-regular fa-star"></i> Tambah Favorit
+                </button>
+                <button onclick="closeModal()" class="bg-kiwari-600 hover:bg-kiwari-700 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-all shadow-md shadow-teal-100">
+                    Tutup Detail
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Toast Notification -->
+    <div id="toast" class="hidden fixed bottom-6 right-6 z-50 bg-slate-900 text-white text-sm px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 transition-all transform translate-y-10 opacity-0 duration-300">
+        <span id="toast-icon" class="text-teal-400"><i class="fa-solid fa-circle-check"></i></span>
+        <span id="toast-message">Pesan sukses disini</span>
+    </div>
+
+    <!-- Footer Halaman -->
+    <footer class="mt-20 border-t border-slate-200 bg-white/90 py-10 shadow-inner">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-slate-600 text-sm mb-8 border-b border-slate-100 pb-8">
+                <!-- Sektor 1: Brand & Moto Polos -->
+                <div class="space-y-3 text-center md:text-left">
+                    <div class="flex items-center justify-center md:justify-start">
+                        <span class="font-title font-black text-lg tracking-wider text-kiwari-900 uppercase">INSTALASI FARMASI</span>
+                    </div>
+                    <p class="text-slate-500 font-medium italic">
+                        “Unggul dalam Layanan, Tulus dalam Pengabdian”
+                    </p>
+                    <p class="text-kiwari-700 font-bold text-base mt-2">
+                        Salam Sehat dari Kiwari!
+                    </p>
+                </div>
+
+                <!-- Sektor 2: Alamat Lengkap RSUD -->
+                <div class="space-y-2 text-center md:text-left">
+                    <h5 class="font-bold text-slate-800 uppercase tracking-wider text-xs">Lokasi & Alamat Kantor</h5>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        <i class="fa-solid fa-map-location-dot text-kiwari-600 mr-1.5"></i>
+                        RSUD Bandung Kiwari<br>
+                        JL. K.H. Wahid Hasyim (Kopo) No. 311, Kelurahan Situsaeur, Kecamatan Bojongloa Kidul, Kota Bandung, Jawa Barat.
+                    </p>
+                </div>
+
+                <!-- Sektor 3: Kontak Whatsapp -->
+                <div class="space-y-3 text-center md:text-left">
+                    <h5 class="font-bold text-slate-800 uppercase tracking-wider text-xs">Hubungi Pelayanan Farmasi</h5>
+                    <p class="text-xs text-slate-500">
+                        Jika Anda memiliki pertanyaan darurat mengenai resep rawat jalan, hubungi nomor kontak resmi kami:
+                    </p>
+                    <div class="flex flex-col gap-2 items-center md:items-start">
+                        <a 
+                            href="https://wa.me/6282260757932" 
+                            target="_blank" 
+                            class="inline-flex items-center gap-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 px-4 py-2 rounded-xl shadow-sm transition-all hover:scale-105"
+                        >
+                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                            082260757932 (WhatsApp)
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hak Cipta & Disclaimer Medis -->
+            <div class="text-center text-xs text-slate-400 space-y-1">
+                <p><strong>Instalasi Farmasi RSUD Bandung Kiwari</strong> © 2026. Hak Cipta Dilindungi.</p>
+                <p class="text-[11px] leading-relaxed">Seluruh informasi obat yang tersedia dalam portal ini disadur dari formularium obat resmi dan ditujukan untuk mengedukasi masyarakat mengenai kepatuhan konsumsi obat mandiri di rumah.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Database obat-obatan komprehensif RSUD Bandung Kiwari (Daftar komprehensif 30+ Obat rawat jalan dalam 7 Kategori Terapi)
+        const medicineDatabase = [
+            // Kategori 1: Jantung & Pembuluh Darah
+            {
+                id: 'amiodarone-200',
+                name: 'Amiodarone 200 mg',
+                category: 'Jantung & Pembuluh Darah',
+                brands: 'Cordarone, Tiaryt, Amiodarone HCl',
+                strength: 'Tablet 200 mg',
+                usage: '1-2 kali sehari 1 tablet, sesudah makan atau sesuai arahan dokter spesialis.',
+                indications: 'Terapi dan pencegahan aritmia ventrikel berat, gangguan irama jantung supraventrikel.',
+                sideEffects: 'Mikrodeposit kornea mata (bersifat reversibel), gangguan tiroid (hiper/hipotiroidisme), sensitivitas cahaya.',
+                warnings: 'Dibutuhkan monitor EKG berkala, tes fungsi tiroid, fungsi paru, dan enzim hati.'
+            },
+            {
+                id: 'amlodipine-5',
+                name: 'Amlodipine 5 mg',
+                category: 'Jantung & Pembuluh Darah',
+                brands: 'Norvask, Divask, Amcor, Amlodipine Besylate',
+                strength: 'Tablet 5 mg',
+                usage: '1 kali sehari 1 tablet, sebelum atau sesudah makan, sebaiknya di pagi hari.',
+                indications: 'Hipertensi (tekanan darah tinggi) esensial dan Angina Pektoris stabil kronis.',
+                sideEffects: 'Kaki bengkak (edema perifer), sakit kepala ringan, wajah memerah hangat (flushing), rasa lelah.',
+                warnings: 'Gunakan dengan hati-hati pada pasien gangguan fungsi hati berat dan lansia.'
+            },
+            {
+                id: 'amlodipine-10',
+                name: 'Amlodipine 10 mg',
+                category: 'Jantung & Pembuluh Darah',
+                brands: 'Norvask 10, Divask 10, Amlodipine Besylate 10',
+                strength: 'Tablet 10 mg',
+                usage: '1 kali sehari 1 tablet, sebelum atau sesudah makan pada pagi/malam hari.',
+                indications: 'Terapi lini pertama Hipertensi derajat sedang hingga berat, Angina vasospastik.',
+                sideEffects: 'Edema perifer signifikan, pusing, palpitasi jantung, kantuk.',
+                warnings: 'Pantau tekanan darah secara berkala. Hubungi dokter jika pembengkakan kaki semakin parah.'
+            },
+            {
+                id: 'candesartan-8',
+                name: 'Candesartan Cilexetil 8 mg',
+                category: 'Jantung & Pembuluh Darah',
+                brands: 'Blopress, Candecard, Canderin',
+                strength: 'Tablet 8 mg',
+                usage: '1 kali sehari 1 tablet, dikonsumsi pada jam yang sama setiap hari, sebelum/sesudah makan.',
+                indications: 'Pengobatan Hipertensi esensial dan terapi tambahan pada gagal jantung dengan gangguan fungsi sistolik.',
+                sideEffects: 'Pusing, sakit kepala, infeksi saluran napas atas, peningkatan kadar kalium darah (hiperkalemia).',
+                warnings: 'Dilarang keras untuk wanita hamil karena berisiko merusak janin.'
+            },
+            {
+                id: 'candesartan-16',
+                name: 'Candesartan Cilexetil 16 mg',
+                category: 'Jantung & Pembuluh Darah',
+                brands: 'Blopress 16, Candecard 16, Canderin 16',
+                strength: 'Tablet 16 mg',
+                usage: '1 kali sehari 1 tablet, diminum utuh dengan air putih, disukai di pagi hari.',
+                indications: 'Hipertensi berat dan gagal jantung dengan intoleransi obat golongan ACE inhibitor.',
+                sideEffects: 'Hipotensi ortostatik (pusing saat mendadak berdiri), hiperkalemia, gangguan ginjal akut ringan.',
+                warnings: 'Kontrol fungsi ginjal dan kadar kalium darah secara teratur selama terapi jangka panjang.'
+            },
+            {
+                id: 'bisoprolol-2.5',
+                name: 'Bisoprolol Fumarate 2.5 mg',
+                category: 'Jantung & Pembuluh Darah',
+                brands: 'Concor, Bipro, Bisoprolol HCl',
+                strength: 'Tablet Salut Selaput 2.5 mg',
+                usage: '1 kali sehari 1 tablet, diminum pagi hari sesudah makan.',
+                indications: 'Terapi gagal jantung kronis stabil derajat sedang-berat, dikombinasikan dengan ACE inhibitor dan diuretik.',
+                sideEffects: 'Tangan dan kaki dingin, kelelahan fisik, bradikardia (denyut nadi lambat), mual.',
+                warnings: 'Jangan menghentikan konsumsi obat secara mendadak karena dapat memperburuk gejala jantung koroner.'
+            },
+            {
+                id: 'bisoprolol-5',
+                name: 'Bisoprolol Fumarate 5 mg',
+                category: 'Jantung & Pembuluh Darah',
+                brands: 'Concor 5, Bipro 5',
+                strength: 'Tablet Salut Selaput 5 mg',
+                usage: '1 kali sehari 1 tablet pada pagi hari sesudah makan.',
+                indications: 'Hipertensi esensial, Angina Pektoris, dan regulasi denyut jantung pada pasien aritmia.',
+                sideEffects: 'Bradikardia, hipotensi, pusing, gangguan tidur, bronkospasme pada pasien asma.',
+                warnings: 'Gunakan dengan pengawasan ketat jika pasien memiliki riwayat asma bronkial atau PPOK.'
+            },
+            {
+                id: 'atorvastatin-20',
+                name: 'Atorvastatin Calcium 20 mg',
+                category: 'Jantung & Pembuluh Darah',
+                brands: 'Lipitor, Atofar, Atorsan',
+                strength: 'Tablet Salut Selaput 20 mg',
+                usage: '1 kali sehari 1 tablet, dikonsumsi pada malam hari sebelum tidur (dengan atau tanpa makan).',
+                indications: 'Menurunkan kolesterol total, LDL, apolipoprotein B, dan trigliserida yang tinggi pada hiperkolesterolemia.',
+                sideEffects: 'Nyeri otot (mialgia), sakit kepala, konstipasi, kembung, peningkatan transaminase hati.',
+                warnings: 'Segera hubungi dokter jika Anda merasakan nyeri atau kelemahan otot tanpa sebab yang jelas (waspada rhabdomyolysis).'
+            },
+
+            // Kategori 2: Diabetes & Hormon
+            {
+                id: 'metformin-500',
+                name: 'Metformin HCl 500 mg',
+                category: 'Diabetes & Hormon',
+                brands: 'Glucophage, Glumin, Metformin Generic',
+                strength: 'Tablet 500 mg',
+                usage: '2-3 kali sehari 1 tablet, wajib dikonsumsi bersama atau segera sesudah makan.',
+                indications: 'Terapi lini pertama Diabetes Melitus tipe 2, terutama pada pasien dengan berat badan berlebih.',
+                sideEffects: 'Gangguan pencernaan (mual, muntah, diare, nyeri perut), rasa logam di mulut.',
+                warnings: 'Kontraindikasi pada pasien dengan gangguan fungsi ginjal berat (GFR < 30 mL/menit).'
+            },
+            {
+                id: 'metformin-850',
+                name: 'Metformin HCl 850 mg',
+                category: 'Diabetes & Hormon',
+                brands: 'Glucophage 850, Metformin 850 Generic',
+                strength: 'Tablet 850 mg',
+                usage: '1-2 kali sehari 1 tablet, dikonsumsi bersama atau setelah makan pagi dan malam.',
+                indications: 'Diabetes Melitus tipe 2 untuk kontrol kadar gula darah jangka panjang.',
+                sideEffects: 'Diare ringan, kram perut, asidosis laktat (jarang terjadi namun serius).',
+                warnings: 'Hindari konsumsi alkohol selama menggunakan obat ini untuk mencegah risiko asidosis laktat.'
+            },
+            {
+                id: 'glimepiride-1',
+                name: 'Glimepiride 1 mg',
+                category: 'Diabetes & Hormon',
+                brands: 'Amaryl, Metrix, Glimell',
+                strength: 'Tablet 1 mg',
+                usage: '1 kali sehari 1 tablet, dikonsumsi segera sebelum atau saat sarapan pagi.',
+                indications: 'Terapi Diabetes Melitus tipe 2 yang tidak cukup terkontrol dengan diet dan olahraga saja.',
+                sideEffects: 'Hipoglikemia (kadar gula darah terlalu rendah), gangguan penglihatan sementara, mual.',
+                warnings: 'Kenali gejala hipoglikemia (keringat dingin, gemetar, lapar, pusing) dan selalu siapkan permen/gula.'
+            },
+            {
+                id: 'glimepiride-2',
+                name: 'Glimepiride 2 mg',
+                category: 'Diabetes & Hormon',
+                brands: 'Amaryl 2, Metrix 2, Glimell 2',
+                strength: 'Tablet 2 mg',
+                usage: '1 kali sehari 1 tablet, dikonsumsi sesaat sebelum makan utama pertama di pagi hari.',
+                indications: 'Terapi diabetes melitus tipe 2 untuk menurunkan gula darah puasa dan post-prandial.',
+                sideEffects: 'Hipoglikemia, sakit kepala, peningkatan berat badan, reaksi alergi kulit.',
+                warnings: 'Harus dikonsumsi secara teratur. Melewatkan makan setelah minum obat ini sangat berisiko hipoglikemia.'
+            },
+
+            // Kategori 3: Lambung & Pencernaan
+            {
+                id: 'omeprazole-20',
+                name: 'Omeprazole 20 mg',
+                category: 'Lambung & Pencernaan',
+                brands: 'Losec, Pumpitor, Prilos, Omeprazole Capsule',
+                strength: 'Kapsul 20 mg',
+                usage: '1-2 kali sehari 1 kapsul, diminum 30-60 menit sebelum makan dalam keadaan perut kosong.',
+                indications: 'Penyakit Reflux Asam Lambung (GERD), Tukak Lambung/Duodenum, Sindrom Zollinger-Ellison.',
+                sideEffects: 'Sakit kepala, diare atau konstipasi, kembung, mual.',
+                warnings: 'Penggunaan jangka panjang dapat mempengaruhi penyerapan Vitamin B12 dan Magnesium.'
+            },
+            {
+                id: 'lansoprazole-30',
+                name: 'Lansoprazole 30 mg',
+                category: 'Lambung & Pencernaan',
+                brands: 'Prosogan, Lapraz, Lasogan, Lansoprazole Capsule',
+                strength: 'Kapsul 30 mg',
+                usage: '1 kali sehari 1 kapsul pada pagi hari sebelum makan.',
+                indications: 'Tukak duodenum aktif, tukak lambung jinak, esofagitis erosif.',
+                sideEffects: 'Mulut kering, pusing, diare, gatal-gatal pada kulit (pruritus).',
+                warnings: 'Kapsul harus ditelan utuh, jangan dikunyah atau dihancurkan.'
+            },
+            {
+                id: 'ranitidine-150',
+                name: 'Ranitidine HCl 150 mg',
+                category: 'Lambung & Pencernaan',
+                brands: 'Zantac, Rantin, Radin',
+                strength: 'Tablet 150 mg',
+                usage: '2 kali sehari 1 tablet, 30 menit sebelum makan (pagi dan malam hari).',
+                indications: 'Pengobatan hipersekresi asam lambung, tukak usus dua belas jari, dispepsia akut.',
+                sideEffects: 'Sakit kepala, pusing, konstipasi, nyeri otot.',
+                warnings: 'Dosis perlu disesuaikan pada pasien dengan gangguan fungsi ginjal.'
+            },
+            {
+                id: 'antasida-kunyah',
+                name: 'Antasida DOEN',
+                category: 'Lambung & Pencernaan',
+                brands: 'Promag, Mylanta, Antasida generik',
+                strength: 'Tablet Kunyah (Aluminium Hidroksida 200mg, Magnesium Hidroksida 200mg)',
+                usage: '3-4 kali sehari 1-2 tablet, dikonsumsi 1 jam sebelum makan atau 2 jam sesudah makan, serta sebelum tidur. Wajib dikunyah dahulu.',
+                indications: 'Mengurangi gejala kelebihan asam lambung, gastritis, tukak lambung, nyeri ulu hati.',
+                sideEffects: 'Sembelit (konstipasi), diare (efek magnesium), kram perut.',
+                warnings: 'Hindari penggunaan jangka panjang terus menerus tanpa instruksi dokter. Jeda konsumsi obat lain minimal 2 jam.'
+            },
+
+            // Kategori 4: Sistem Saraf & Nyeri
+            {
+                id: 'paracetamol-500',
+                name: 'Paracetamol 500 mg',
+                category: 'Sistem Saraf & Nyeri',
+                brands: 'Panadol, Sanmol, Biogesic, Paracetamol Tablet',
+                strength: 'Tablet 500 mg',
+                usage: '3-4 kali sehari 1 tablet bila demam atau nyeri hebat. Maksimal 8 tablet sehari.',
+                indications: 'Meredakan nyeri ringan-sedang (sakit kepala, sakit gigi) dan menurunkan demam.',
+                sideEffects: 'Reaksi alergi (sangat jarang), kerusakan hati pada penggunaan dosis sangat tinggi.',
+                warnings: 'Jangan mengonsumsi obat lain yang juga mengandung Paracetamol secara bersamaan.'
+            },
+            {
+                id: 'paracetamol-650',
+                name: 'Paracetamol Forte 650 mg',
+                category: 'Sistem Saraf & Nyeri',
+                brands: 'Sanmol Forte, Paracetamol Forte',
+                strength: 'Tablet 650 mg',
+                usage: '3 kali sehari 1 tablet sesudah makan bila diperlukan.',
+                indications: 'Nyeri pasca operasi ringan, sakit gigi hebat, demam tinggi.',
+                sideEffects: 'Mual ringan, ruam kulit, toksisitas hati pada overdosis.',
+                warnings: 'Hati-hati penggunaan pada penderita gangguan hati kronis atau kecanduan alkohol.'
+            },
+            {
+                id: 'ibuprofen-400',
+                name: 'Ibuprofen 400 mg',
+                category: 'Sistem Saraf & Nyeri',
+                brands: 'Proris, Bufect, Ibuprofen Tablet',
+                strength: 'Tablet salut selaput 400 mg',
+                usage: '3 kali sehari 1 tablet, wajib sesudah makan untuk melindungi dinding lambung.',
+                indications: 'Meredakan nyeri sendi, sakit gigi, migrain, nyeri haid (dismenore), bengkak radang.',
+                sideEffects: 'Nyeri lambung, mual, heartburn, perdarahan saluran cerna (pada pemakaian lama).',
+                warnings: 'Gunakan dengan sangat hati-hati jika memiliki riwayat sakit maag kronis atau tukak lambung.'
+            },
+            {
+                id: 'gabapentin-100',
+                name: 'Gabapentin 100 mg',
+                category: 'Sistem Saraf & Nyeri',
+                brands: 'Alpentin, Neurontin, Gabexal',
+                strength: 'Kapsul 100 mg',
+                usage: '1-3 kali sehari 1 kapsul, sesuai titrasi dosis yang ditentukan oleh dokter saraf.',
+                indications: 'Terapi nyeri neuropatik (nyeri akibat kerusakan saraf, misal pasca-herpes atau neuropati diabetik).',
+                sideEffects: 'Kantuk (sedasi), pusing berputar, lelah, gerakan mata tidak terkontrol (nistagmus).',
+                warnings: 'Dapat menyebabkan kantuk hebat. Jangan mengemudikan kendaraan setelah mengonsumsi obat ini.'
+            },
+            {
+                id: 'amitriptyline-25',
+                name: 'Amitriptyline 25 mg',
+                category: 'Sistem Saraf & Nyeri',
+                brands: 'Amitriptyline HCl generic',
+                strength: 'Tablet Salut Selaput 25 mg',
+                usage: '1 kali sehari 1 tablet, diminum malam hari sebelum tidur karena efek kantuk kuat.',
+                indications: 'Terapi nyeri neuropatik kronis, pencegahan migrain, dan terapi depresi.',
+                sideEffects: 'Mulut kering, penglihatan kabur, sembelit, retensi urin, kantuk berat.',
+                warnings: 'Gunakan secara hati-hati pada lansia karena risiko jatuh akibat hipotensi ortostatik.'
+            },
+
+            // Kategori 5: Antibiotik & Infeksi
+            {
+                id: 'amoxicillin-500',
+                name: 'Amoxicillin Trihydrate 500 mg',
+                category: 'Antibiotik & Infeksi',
+                brands: 'Amoxsan, Kalmoxillin, Amoxicillin Generic',
+                strength: 'Tablet / Kaplet 500 mg',
+                usage: '3 kali sehari 1 tablet, wajib dihabiskan meskipun gejala penyakit telah hilang.',
+                indications: 'Infeksi bakteri gram-positif dan gram-negatif pada saluran napas, THT, kulit, dan saluran kemih.',
+                sideEffects: 'Diare ringan, mual, ruam kulit alergi, superinfeksi jamur (pada pemakaian lama).',
+                warnings: 'Wajib dihabiskan untuk mencegah resistensi bakteri. Kontraindikasi bagi yang alergi Penicillin.'
+            },
+            {
+                id: 'cefixime-100',
+                name: 'Cefixime 100 mg',
+                category: 'Antibiotik & Infeksi',
+                brands: 'Cefspan, Ceptik, Fixacep',
+                strength: 'Kapsul 100 mg',
+                usage: '2 kali sehari 1 kapsul (setiap 12 jam), wajib dihabiskan secara konsisten.',
+                indications: 'Infeksi saluran kemih tanpa komplikasi, otitis media, faringitis/tonsilitis, bronkitis akut.',
+                sideEffects: 'Diare, feses encer, nyeri perut, pruritus, pusing.',
+                warnings: 'Gunakan dengan hati-hati pada pasien dengan riwayat alergi obat golongan sefalosporin.'
+            },
+            {
+                id: 'cefixime-200',
+                name: 'Cefixime 200 mg',
+                category: 'Antibiotik & Infeksi',
+                brands: 'Cefspan 200, Ceptik 200',
+                strength: 'Kapsul 200 mg',
+                usage: '1-2 kali sehari 1 kapsul, harus dihabiskan sesuai resep apoteker.',
+                indications: 'Terapi infeksi bakteri yang lebih berat, demam tifoid pada anak/dewasa.',
+                sideEffects: 'Mual berat, kolitis pseudomembranosa (diare parah akibat bakteri Clostridium).',
+                warnings: 'Konsultasikan segera jika muncul diare hebat setelah mengonsumsi antibiotik ini.'
+            },
+
+            // Kategori 6: Pernapasan & Alergi
+            {
+                id: 'salbutamol-2',
+                name: 'Salbutamol Sulfate 2 mg',
+                category: 'Pernapasan & Alergi',
+                brands: 'Ventolin, Astharol, Lasal, Salbutamol generic',
+                strength: 'Tablet 2 mg',
+                usage: '3-4 kali sehari 1-2 tablet, diminum 1 jam sebelum makan atau 2 jam sesudah makan.',
+                indications: 'Pencegahan dan pengobatan bronkospasme pada penyakit Asma Bronkial, Bronkitis Kronis, Emfisema.',
+                sideEffects: 'Tangan gemetar halus (tremor), jantung berdebar (palpitasi), kram otot, sakit kepala.',
+                warnings: 'Gunakan dengan pengawasan ketat jika menderita hipertiroidisme, hipertensi, atau penyakit jantung.'
+            },
+            {
+                id: 'salbutamol-4',
+                name: 'Salbutamol Sulfate 4 mg',
+                category: 'Pernapasan & Alergi',
+                brands: 'Ventolin 4, Astharol 4, Lasal 4',
+                strength: 'Tablet 4 mg',
+                usage: '3 kali sehari 1 tablet, diminum saat sesak napas muncul.',
+                indications: 'Meredakan serangan asma akut dan penyempitan saluran napas bronkus.',
+                sideEffects: 'Tremor otot skeletal, palpitasi, takikardia, gelisah.',
+                warnings: 'Dosis tinggi dapat menurunkan kadar kalium darah (hipokalemia).'
+            },
+            {
+                id: 'cetirizine-10',
+                name: 'Cetirizine Di-HCl 10 mg',
+                category: 'Pernapasan & Alergi',
+                brands: 'Ryzen, Incidal-OD, Ozen, Cetirizine Tablet',
+                strength: 'Tablet Salut Selaput 10 mg',
+                usage: '1 kali sehari 1 tablet, sebaiknya malam hari sebelum tidur karena berpotensi memicu kantuk ringan.',
+                indications: 'Rinitis alergi musiman, gatal-gatal kronis (urtikaria idiopatik kronis), alergi dingin/debu.',
+                sideEffects: 'Kantuk ringan, mulut kering, kelelahan, sakit kepala.',
+                warnings: 'Hindari mengonsumsi obat penenang (sedatif) atau alkohol bersamaan dengan obat ini.'
+            },
+            {
+                id: 'methylprednisolone-4',
+                name: 'Methylprednisolone 4 mg',
+                category: 'Pernapasan & Alergi',
+                brands: 'Medixon, Lameson, Lexidron',
+                strength: 'Tablet 4 mg',
+                usage: '2-3 kali sehari 1 tablet, wajib dikonsumsi sesudah makan.',
+                indications: 'Penyakit kolagen, asma bronkial berat, eksaserbasi rinitis alergi, penyakit autoimun.',
+                sideEffects: 'Retensi cairan (wajah moon face), peningkatan nafsu makan, gangguan lambung, kelemahan otot.',
+                warnings: 'Jangan menghentikan obat ini secara mendadak jika sudah dikonsumsi jangka panjang (harus tapering off).'
+            },
+
+            // Kategori 7: Vitamin & Suplemen
+            {
+                id: 'vit-b-complex',
+                name: 'Vitamin B Kompleks',
+                category: 'Vitamin & Suplemen',
+                brands: 'Becom-C, Vitamin B Complex Generik',
+                strength: 'Tablet Salut Gula',
+                usage: '1 kali sehari 1-2 tablet setelah makan pagi.',
+                indications: 'Pencegahan dan pengobatan kekurangan vitamin B kompleks, memelihara kesehatan sistem saraf.',
+                sideEffects: 'Urin berubah warna menjadi lebih kuning pekat (normal karena ekskresi Vitamin B2).',
+                warnings: 'Bukan pengganti pola makan gizi seimbang.'
+            },
+            {
+                id: 'vit-c-500',
+                name: 'Vitamin C 500 mg',
+                category: 'Vitamin & Suplemen',
+                brands: 'Vicee, Vitacimin, Vitamin C generic',
+                strength: 'Tablet 500 mg',
+                usage: '1 kali sehari 1 tablet setelah makan pagi.',
+                indications: 'Pencegahan defisiensi Vitamin C, mempercepat penyembuhan luka, menjaga imun tubuh.',
+                sideEffects: 'Nyeri ulu hati pada penderita maag sensitif, diare (pada dosis sangat tinggi).',
+                warnings: 'Hati-hati penggunaan pada pasien batu ginjal karena risiko pembentukan oksalat.'
+            },
+            {
+                id: 'calcium-lactate',
+                name: 'Kalsium Laktat 500 mg',
+                category: 'Vitamin & Suplemen',
+                brands: 'Kalk, Calcium Lactate Generic',
+                strength: 'Tablet 500 mg',
+                usage: '2 kali sehari 1 tablet sesudah makan.',
+                indications: 'Kebutuhan kalsium tambahan pada ibu hamil, menyusui, masa pertumbuhan anak, serta pencegahan osteoporosis.',
+                sideEffects: 'Konstipasi ringan, kembung.',
+                warnings: 'Konsultasikan jika Anda mengonsumsi obat jantung Digoxin, karena kalsium dapat berinteraksi.'
+            }
+        ];
+
+        // State management aplikasi portal informasi obat
+        let selectedCategory = ''; // Kosong berarti harus memilih kategori atau melakukan pencarian terlebih dahulu
+        let searchTerm = '';
+        let sortOrder = 'az';
+        let favoriteMedicines = [];
+
+        // Inisialisasi awal saat halaman selesai dimuat
+        window.onload = function() {
+            loadFavorites();
+            generateCategoryButtons();
+            updateFavoritesCounter();
+            renderMedicines();
+        };
+
+        // Fungsi memuat data favorit dari localStorage agar persisten
+        function loadFavorites() {
+            try {
+                const stored = localStorage.getItem('kiwari_fav_drugs');
+                if (stored) {
+                    favoriteMedicines = JSON.parse(stored);
+                }
+            } catch (e) {
+                console.error("Gagal memuat favorit dari penyimpanan lokal:", e);
+                favoriteMedicines = [];
+            }
+        }
+
+        // Simpan data favorit ke localStorage
+        function saveFavorites() {
+            try {
+                localStorage.setItem('kiwari_fav_drugs', JSON.stringify(favoriteMedicines));
+            } catch (e) {
+                console.error("Gagal menyimpan favorit:", e);
+            }
+        }
+
+        // Menghasilkan tombol kategori secara dinamis dari database obat yang tersedia
+        function generateCategoryButtons() {
+            // Dapatkan daftar kategori unik dari database
+            const categories = [...new Set(medicineDatabase.map(item => item.category))];
+            const listContainer = document.getElementById('category-list');
+            
+            let html = `
+                <button 
+                    onclick="selectCategory('semua')" 
+                    id="cat-btn-semua"
+                    class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-between bg-white text-slate-700 hover:bg-teal-50 border border-slate-100"
+                >
+                    <span><i class="fa-solid fa-list mr-2 text-kiwari-500"></i>Semua Obat</span>
+                    <span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full text-xs font-bold border border-slate-200">${medicineDatabase.length}</span>
+                </button>
+            `;
+
+            categories.forEach(cat => {
+                const count = medicineDatabase.filter(item => item.category === cat).length;
+                const safeId = cat.replace(/\s+/g, '-').toLowerCase();
+                html += `
+                    <button 
+                        onclick="selectCategory('${cat}')" 
+                        id="cat-btn-${safeId}"
+                        class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-between bg-white text-slate-700 hover:bg-teal-50 border border-slate-100"
+                    >
+                        <span class="truncate"><i class="fa-solid fa-prescription-bottle mr-2 text-kiwari-500"></i>${cat}</span>
+                        <span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full text-xs font-bold border border-slate-200 shrink-0">${count}</span>
+                    </button>
+                `;
+            });
+
+            listContainer.innerHTML = html;
+        }
+
+        // Merender / menggambar daftar obat berdasarkan pencarian, kategori yang dipilih, dan pengurutan
+        function renderMedicines() {
+            const grid = document.getElementById('medicine-grid');
+            const emptyState = document.getElementById('empty-state');
+            const resultCountText = document.getElementById('drug-results-count');
+            const currentTitleText = document.getElementById('current-category-title');
+
+            // Hapus kelas aktif dari semua tombol kategori terlebih dahulu
+            document.querySelectorAll('#category-list button').forEach(btn => {
+                btn.classList.remove('bg-kiwari-600', 'text-white', 'border-kiwari-600');
+                btn.classList.add('bg-white', 'text-slate-700', 'border-slate-100');
+                // Mengembalikan warna teks angka badge
+                const badge = btn.querySelector('span:last-child');
+                if (badge) {
+                    badge.classList.remove('bg-kiwari-700', 'text-teal-100');
+                    badge.classList.add('bg-slate-100', 'text-slate-600');
+                }
+            });
+
+            // 1. Filter berdasarkan Kategori & Cari Kata Kunci
+            let filtered = [...medicineDatabase];
+
+            if (selectedCategory === 'favorites') {
+                filtered = filtered.filter(item => favoriteMedicines.includes(item.id));
+                currentTitleText.innerHTML = `<i class="fa-solid fa-star text-amber-500 mr-2"></i>Daftar Obat Terfavorit Anda`;
+                updateCategoryActiveUI('favorites');
+            } else if (selectedCategory === 'semua') {
+                currentTitleText.textContent = "Seluruh Formularium Obat RSUD Kiwari";
+                updateCategoryActiveUI('semua');
+            } else if (selectedCategory !== '') {
+                filtered = filtered.filter(item => item.category === selectedCategory);
+                currentTitleText.textContent = selectedCategory;
+                updateCategoryActiveUI(selectedCategory);
+            } else {
+                // Keadaan awal saat user baru membuka website tanpa memencet kategori atau mencari apapun
+                if (searchTerm.trim() === '') {
+                    grid.classList.add('hidden');
+                    emptyState.classList.remove('hidden');
+                    resultCountText.textContent = 'Klik menu "Kategori Terapi" di samping untuk menelusuri obat.';
+                    currentTitleText.textContent = "Silakan Pilih Kategori";
+                    return;
+                }
+                currentTitleText.textContent = "Hasil Pencarian Obat Mandiri";
+            }
+
+            // Filter Kata Kunci Pencarian Pintar (mencari kecocokan nama generik, merek dagang, atau indikasi)
+            if (searchTerm.trim() !== '') {
+                const query = searchTerm.toLowerCase().trim();
+                filtered = filtered.filter(item => 
+                    item.name.toLowerCase().includes(query) || 
+                    item.brands.toLowerCase().includes(query) ||
+                    item.category.toLowerCase().includes(query) ||
+                    item.indications.toLowerCase().includes(query)
+                );
+                currentTitleText.textContent = `Pencarian: "${searchTerm}"`;
+            }
+
+            // 2. Sortir Data (A-Z atau Z-A)
+            filtered.sort((a, b) => {
+                const nameA = a.name.toLowerCase();
+                const nameB = b.name.toLowerCase();
+                if (sortOrder === 'az') {
+                    return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+                } else {
+                    return nameA > nameB ? -1 : nameA < nameB ? 1 : 0;
+                }
+            });
+
+            // 3. Tampilkan data ke grid obat
+            if (filtered.length === 0) {
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                emptyState.querySelector('h4').textContent = "Obat Tidak Ditemukan";
+                emptyState.querySelector('p').innerHTML = "Kami tidak menemukan kecocokan data untuk kata kunci tersebut. Coba gunakan kata kunci generik lain seperti <em>Metformin, Omeprazole, atau Amlodipine</em>.";
+                resultCountText.textContent = "Menampilkan 0 obat.";
+            } else {
+                emptyState.classList.add('hidden');
+                grid.classList.remove('hidden');
+                resultCountText.textContent = `Menampilkan ${filtered.length} obat ditemukan.`;
+
+                let gridHtml = '';
+                filtered.forEach(drug => {
+                    const isFav = favoriteMedicines.includes(drug.id);
+                    gridHtml += `
+                        <div class="bg-white rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden">
+                            <!-- Label Atas Kategori -->
+                            <div class="px-5 pt-5 pb-2 flex items-center justify-between gap-2">
+                                <span class="bg-kiwari-50 text-kiwari-700 text-[10px] font-bold px-2.5 py-1 rounded-full border border-kiwari-100 uppercase tracking-wider truncate">
+                                    ${drug.category}
+                                </span>
+                                <button onclick="toggleFavorite('${drug.id}')" class="text-slate-300 hover:text-amber-500 transition-colors p-1" title="Favorit">
+                                    <i class="${isFav ? 'fa-solid fa-star text-amber-400' : 'fa-regular fa-star'} text-lg"></i>
+                                </button>
+                            </div>
+
+                            <!-- Judul & Nama Dagang -->
+                            <div class="px-5 py-2 flex-grow">
+                                <h4 class="font-title font-extrabold text-slate-800 text-lg leading-snug hover:text-kiwari-600 cursor-pointer" onclick="openModal('${drug.id}')">
+                                    ${drug.name}
+                                </h4>
+                                <p class="text-xs text-slate-400 mt-1 truncate italic">
+                                    Merek: ${drug.brands}
+                                </p>
+                            </div>
+
+                            <!-- Deskripsi Singkat Indikasi -->
+                            <div class="px-5 py-2">
+                                <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                                    <strong>Indikasi:</strong> ${drug.indications}
+                                </p>
+                            </div>
+
+                            <!-- Footer Kartu -->
+                            <div class="px-5 pb-5 pt-3 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between gap-2">
+                                <span class="text-[11px] font-semibold text-slate-400">
+                                    <i class="fa-solid fa-vial text-kiwari-500 mr-1"></i> ${drug.strength}
+                                </span>
+                                <button onclick="openModal('${drug.id}')" class="bg-white hover:bg-kiwari-50 text-kiwari-600 border border-kiwari-100 hover:border-kiwari-300 font-bold text-xs px-3.5 py-2 rounded-xl transition-all shadow-sm flex items-center gap-1.5">
+                                    Baca Aturan <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                grid.innerHTML = gridHtml;
+            }
+        }
+
+        // Mengatur status aktif pada button kategori di sidebar agar user tahu di mana dia berada
+        function updateCategoryActiveUI(targetCategory) {
+            const safeId = targetCategory.replace(/\s+/g, '-').toLowerCase();
+            const btn = document.getElementById(`cat-btn-${safeId}`);
+            if (btn) {
+                btn.classList.remove('bg-white', 'text-slate-700', 'border-slate-100');
+                btn.classList.add('bg-kiwari-600', 'text-white', 'border-kiwari-600');
+                const badge = btn.querySelector('span:last-child');
+                if (badge) {
+                    badge.classList.remove('bg-slate-100', 'text-slate-600');
+                    badge.classList.add('bg-kiwari-700', 'text-teal-100');
+                }
+            }
+        }
+
+        // Fungsi pemicu saat kategori diklik
+        function selectCategory(categoryName) {
+            selectedCategory = categoryName;
+            // Tutup accordion kategori di mobile agar layar tidak penuh tertutup
+            if (window.innerWidth < 1024) {
+                toggleCategoryAccordion(true); // Paksa tutup
+            }
+            renderMedicines();
+            // Scroll ke hasil pencarian agar pengguna mobile langsung melihat isi datanya
+            const container = document.getElementById('main-content-obat');
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Pengendali perubahan input teks pencarian obat
+        function handleSearch(value) {
+            searchTerm = value;
+            if (value.trim() !== '') {
+                // Jika user mengetik sesuatu, lepas filter kategori spesifik agar pencarian bersifat global
+                selectedCategory = ''; 
+            }
+            renderMedicines();
+        }
+
+        // Bersihkan isian kolom pencarian obat
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            searchTerm = '';
+            renderMedicines();
+            showToast("Bilah pencarian telah dibersihkan", "info");
+        }
+
+        // Mengubah urutan sortir data obat
+        function handleSort(order) {
+            sortOrder = order;
+            renderMedicines();
+        }
+
+        // Menampilkan daftar favorit saja
+        function toggleFavoritesView() {
+            if (selectedCategory === 'favorites') {
+                selectedCategory = 'semua';
+                showToast("Menampilkan seluruh obat kembali", "info");
+            } else {
+                selectedCategory = 'favorites';
+                searchTerm = '';
+                document.getElementById('search-input').value = '';
+                showToast("Menampilkan daftar obat favorit Anda", "success");
+            }
+            renderMedicines();
+        }
+
+        // Fungsi menambah atau menghapus dari favorit
+        function toggleFavorite(id) {
+            const index = favoriteMedicines.indexOf(id);
+            const drug = medicineDatabase.find(item => item.id === id);
+            
+            if (index === -1) {
+                favoriteMedicines.push(id);
+                showToast(`"${drug.name}" ditambahkan ke favorit`, "success");
+            } else {
+                favoriteMedicines.splice(index, 1);
+                showToast(`"${drug.name}" dihapus dari favorit`, "info");
+            }
+            
+            saveFavorites();
+            updateFavoritesCounter();
+            renderMedicines();
+
+            // Perbarui tombol modal juga jika modal sedang terbuka
+            const modal = document.getElementById('medicine-modal');
+            if (!modal.classList.contains('hidden')) {
+                updateModalFavoriteButtonState(id);
+            }
+        }
+
+        // Memperbarui badge angka merah penanda jumlah item obat favorit
+        function updateFavoritesCounter() {
+            const counter = document.getElementById('fav-count');
+            const toggleBtn = document.getElementById('favorite-toggle-btn');
+            
+            if (favoriteMedicines.length > 0) {
+                counter.textContent = favoriteMedicines.length;
+                counter.classList.remove('hidden');
+                toggleBtn.classList.add('border-rose-200', 'bg-rose-50/50', 'text-rose-600');
+            } else {
+                counter.classList.add('hidden');
+                toggleBtn.classList.remove('border-rose-200', 'bg-rose-50/50', 'text-rose-600');
+            }
+        }
+
+        // MEMBUKA MODAL DETAIL SPESIFIKASI OBAT
+        function openModal(id) {
+            const drug = medicineDatabase.find(item => item.id === id);
+            if (!drug) return;
+
+            document.getElementById('modal-badge').textContent = drug.category;
+            document.getElementById('modal-drug-name').textContent = drug.name;
+            document.getElementById('modal-brands').innerHTML = `<i class="fa-solid fa-tag mr-1 text-teal-200"></i> Nama Dagang: ${drug.brands}`;
+            document.getElementById('modal-strength').textContent = drug.strength;
+            document.getElementById('modal-usage').textContent = drug.usage;
+            document.getElementById('modal-indications').textContent = drug.indications;
+            document.getElementById('modal-side-effects').textContent = drug.sideEffects;
+            document.getElementById('modal-warnings').textContent = drug.warnings;
+
+            // Atur fungsi tombol favorit di dalam modal secara dinamis
+            const favBtn = document.getElementById('modal-fav-btn');
+            favBtn.setAttribute('onclick', `toggleFavorite('${drug.id}')`);
+            updateModalFavoriteButtonState(drug.id);
+
+            // Buka Modal & cegah scroll pada background body
+            const modal = document.getElementById('medicine-modal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Memperbarui gaya desain tombol favorit dalam modal sesuai status terfavorit
+        function updateModalFavoriteButtonState(id) {
+            const isFav = favoriteMedicines.includes(id);
+            const favBtn = document.getElementById('modal-fav-btn');
+            
+            if (isFav) {
+                favBtn.innerHTML = `<i class="fa-solid fa-star text-amber-500 animate-bounce"></i> Hapus Favorit`;
+                favBtn.className = "flex items-center gap-2 text-sm text-amber-700 bg-amber-50 hover:bg-amber-100 px-4 py-2 rounded-lg border border-amber-200 transition-all font-semibold";
+            } else {
+                favBtn.innerHTML = `<i class="fa-regular fa-star text-slate-400"></i> Tambah Favorit`;
+                favBtn.className = "flex items-center gap-2 text-sm text-slate-600 hover:text-kiwari-600 px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-100 transition-all";
+            }
+        }
+
+        // MENUTUP MODAL
+        function closeModal() {
+            document.getElementById('medicine-modal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // Animasi buka/tutup kategori akordion untuk optimalisasi layar kecil / mobile layout
+        function toggleCategoryAccordion(forceClose = false) {
+            const container = document.getElementById('category-list-container');
+            const chevron = document.getElementById('accordion-chevron');
+            const badge = document.getElementById('accordion-badge');
+
+            if (container.classList.contains('hidden') && !forceClose) {
+                container.classList.remove('hidden');
+                chevron.classList.add('rotate-180');
+                badge.textContent = "Tutup";
+            } else {
+                container.classList.add('hidden');
+                chevron.classList.remove('rotate-180');
+                badge.textContent = "Buka";
+            }
+        }
+
+        // Animasi slide-down / buka tutup menu edukasi DAGUSIBU nasional
+        function toggleDagusibu() {
+            const content = document.getElementById('dagusibu-content');
+            const chevron = document.getElementById('dagusibu-chevron');
+
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                chevron.classList.add('rotate-180');
+                content.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                content.classList.add('hidden');
+                chevron.classList.remove('rotate-180');
+            }
+        }
+
+        // CUSTOM TOAST NOTIFICATION SYSTEM (Lebih aman dibanding "alert()" bawaan browser)
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            const toastIcon = document.getElementById('toast-icon');
+
+            toastMsg.textContent = message;
+
+            if (type === 'success') {
+                toastIcon.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i>`;
+            } else if (type === 'info') {
+                toastIcon.innerHTML = `<i class="fa-solid fa-circle-info text-blue-400"></i>`;
+            } else {
+                toastIcon.innerHTML = `<i class="fa-solid fa-circle-exclamation text-rose-400"></i>`;
+            }
+
+            // Tampilkan dengan efek transisi translasi y-axis
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+                toast.classList.add('translate-y-0', 'opacity-100');
+            }, 50);
+
+            // Sembunyikan otomatis setelah 3 detik berlalu
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
